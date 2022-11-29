@@ -1,4 +1,3 @@
-# nvim
-My neovim configuration
+# Neovim configuration
 
 Clone it in `~/.config/nvim`
