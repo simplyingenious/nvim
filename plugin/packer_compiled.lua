@@ -119,6 +119,11 @@ _G.packer_plugins = {
     path = "/Users/salmanjaved/.local/share/nvim/site/pack/packer/start/editorconfig-vim",
     url = "https://github.com/editorconfig/editorconfig-vim"
   },
+  ["eslint.nvim"] = {
+    loaded = true,
+    path = "/Users/salmanjaved/.local/share/nvim/site/pack/packer/start/eslint.nvim",
+    url = "https://github.com/MunifTanjim/eslint.nvim"
+  },
   ["gitsigns.nvim"] = {
     loaded = true,
     path = "/Users/salmanjaved/.local/share/nvim/site/pack/packer/start/gitsigns.nvim",
