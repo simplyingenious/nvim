@@ -1,5 +1,10 @@
--- Set up nvim-cmp.
+local Remap = require('simplyingenious.keymap')
+local nnoremap = Remap.nnoremap
+local inoremap = Remap.inoremap
+
 local cmp = require'cmp'
+local lspconfig = require'lspconfig'
+local null_ls = require("null-ls")
 
 cmp.setup({
   snippet = {
@@ -25,9 +30,28 @@ cmp.setup({
   })
 })
 
+local formatting = null_ls.builtins.formatting
+local code_actions = null_ls.builtins.code_actions
+local diagnostics = null_ls.builtins.diagnostics
 
-local null_ls = require("null-ls")
 null_ls.setup({
+  sources = {
+    code_actions.eslint_d,
+    diagnostics.eslint_d,
+    formatting.eslint_d,
+    formatting.prettierd,
+
+    diagnostics.stylelint,
+    formatting.stylelint,
+
+    formatting.lua_format.with({
+      extra_args = {
+        '--no-keep-simple-function-one-line', '--no-break-after-operator', '--column-limit=120',
+        '--break-after-table-lb', '--indent-width=2'
+      }
+    })
+  },
+
   on_attach = function(client, bufnr)
     if client.server_capabilities.documentFormattingProvider then
       vim.cmd("nnoremap <silent><buffer> <Leader>f :lua vim.lsp.buf.format {async = true}<CR>")
@@ -42,57 +66,6 @@ null_ls.setup({
   end,
 })
 
-
-local prettier = require("prettier")
-prettier.setup({
-  bin = 'prettierd',
-  filetypes = {
-    "graphql",
-    "html",
-    "javascript",
-    "javascriptreact",
-    "json",
-    -- "css",
-    -- "less",
-    -- "scss",
-    "markdown",
-    "typescript",
-    "typescriptreact",
-    "yaml",
-  },
-})
-
-local lspconfig = require'lspconfig'
-lspconfig.stylelint_lsp.setup{
-  settings = {
-    stylelintplus = {
-      autoFixOnSave = true,
-      autoFixOnFormat = true
-    }
-  }
-}
-
-local eslint = require("eslint")
-
-eslint.setup({
-  bin = 'eslint', -- or `eslint_d`
-  code_actions = {
-    enable = true,
-    apply_on_save = {
-      enable = true,
-      types = { "directive", "problem", "suggestion", "layout" },
-    },
-    disable_rule_comment = {
-      enable = true,
-      location = "separate_line", -- or `same_line`
-    },
-  },
-  diagnostics = {
-    enable = true,
-    report_unused_disable_directives = false,
-    run_on = "type", -- or `save`
-  },
-})
 
 lspconfig.emmet_ls.setup({
   filetypes = { 'html', 'javascript', 'javascriptreact', 'css', 'sass', 'scss', 'less' },
