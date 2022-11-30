@@ -26,7 +26,7 @@ return require('packer').startup(function(use)
   use('lewis6991/gitsigns.nvim')
   use('editorconfig/editorconfig-vim')
   use('norcalli/nvim-colorizer.lua')
-  use('windwp/nvim-ts-autotag')
+  -- use('windwp/nvim-ts-autotag')
 
   -- color schemes
   use 'ellisonleao/gruvbox.nvim'
