@@ -11,6 +11,11 @@ nnoremap("<leader>f", ":lua vim.lsp.buf.format {async = true}<CR>")
 nnoremap("<C-w>", ":bd<CR>")
 vnoremap("<C-c>", "\"+y")
 
+nnoremap("<C-d>", "<C-d>zz")
+nnoremap("<C-u>", "<C-u>zz")
+nnoremap("n", "nzz")
+nnoremap("N", "Nzz")
+
 -- terminal
 nnoremap("<C-n>", ":call OpenTerminal()<CR>")
 tnoremap("<Esc>", "<C-\\><C-n>")
