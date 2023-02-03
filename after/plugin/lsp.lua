@@ -6,6 +6,8 @@ local cmp = require'cmp'
 local lspconfig = require'lspconfig'
 local null_ls = require("null-ls")
 
+vim.cmd [[autocmd! CursorHold,CursorHoldI * lua vim.diagnostic.open_float(nil, {focus=false})]]
+
 cmp.setup({
   snippet = {
     -- REQUIRED - you must specify a snippet engine
@@ -27,6 +29,7 @@ cmp.setup({
     { name = 'nvim_lsp' },
     { name = 'luasnip' },
     { name = 'buffer' },
+    { name = 'path' },
   })
 })
 
@@ -44,12 +47,12 @@ null_ls.setup({
     diagnostics.stylelint,
     formatting.stylelint,
 
-    formatting.lua_format.with({
-      extra_args = {
-        '--no-keep-simple-function-one-line', '--no-break-after-operator', '--column-limit=120',
-        '--break-after-table-lb', '--indent-width=2'
-      }
-    })
+    -- formatting.lua_format.with({
+    --   extra_args = {
+    --     '--no-keep-simple-function-one-line', '--no-break-after-operator', '--column-limit=120',
+    --     '--break-after-table-lb', '--indent-width=2'
+    --   }
+    -- })
   },
 
   on_attach = function(client, bufnr)
@@ -57,7 +60,7 @@ null_ls.setup({
       vim.cmd("nnoremap <silent><buffer> <Leader>f :lua vim.lsp.buf.format {async = true}<CR>")
 
       -- format on save
-      vim.cmd("autocmd BufWritePost <buffer> lua vim.lsp.buf.format {async = true}")
+      -- vim.cmd("autocmd BufWritePost <buffer> lua vim.lsp.buf.format {async = true}")
     end
 
     if client.server_capabilities.documentRangeFormattingProvider then
@@ -71,3 +74,4 @@ lspconfig.emmet_ls.setup({
   filetypes = { 'html', 'javascript', 'javascriptreact', 'css', 'sass', 'scss', 'less' },
 })
 
+lspconfig.tsserver.setup{}
