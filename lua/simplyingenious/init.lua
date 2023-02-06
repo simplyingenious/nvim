@@ -1,8 +1,6 @@
-require('simplyingenious.packer')
-require('simplyingenious.set')
-require('simplyingenious.neogit')
-require('simplyingenious.telescope')
-require('simplyingenious.terminal')
+require("simplyingenious.remap")
+require("simplyingenious.set")
+require("simplyingenious.terminal")
 
 local augroup = vim.api.nvim_create_augroup
 local autocmd = vim.api.nvim_create_autocmd

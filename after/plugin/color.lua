@@ -1,3 +1,6 @@
-vim.opt.background = 'dark'
+function ColorIt(color)
+	color = color or "rose-pine"
+	vim.cmd.colorscheme(color)
+end
 
-vim.cmd("colorscheme gruvbox")
+ColorIt()
