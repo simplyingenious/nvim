@@ -46,7 +46,7 @@ return require('packer').startup(function(use)
       -- Additional Plugins
     }
   }
-
+  use('jose-elias-alvarez/null-ls.nvim')
   use('JoosepAlviste/nvim-ts-context-commentstring')
   use('windwp/nvim-autopairs')
   use('windwp/nvim-ts-autotag')
