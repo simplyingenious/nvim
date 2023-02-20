@@ -56,13 +56,13 @@ lsp.setup()
 --     sources = {
 --         code_actions.eslint_d,
 --         formatting.eslint_d,
---         -- diagnostics.eslint_d,
+--         diagnostics.eslint_d,
 --         -- diagnostics.stylelint,
---         -- formatting.prettierd,
+--         formatting.prettierd,
 --         -- formatting.stylelint,
 --     },
 --     on_attach = function(client, bufnr)
---       -- null_opts.on_attach(client, bufnr)
+--       null_opts.on_attach(client, bufnr)
 --       if client.server_capabilities.documentFormattingProvider then
 --         vim.keymap.set('n', '<leader>f', ':lua vim.lsp.buf.format({ async = true })<CR>',
 --             { silent = true, buffer = true })
