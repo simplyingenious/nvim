@@ -22,7 +22,7 @@ vim.keymap.set({ "n", "v" }, "<leader>d", [["_d]])
 -- This is going to get me cancelled
 vim.keymap.set("i", "<C-c>", "<Esc>")
 
-vim.keymap.set("n", "Q", "<nop>")
+vim.keymap.set("n", "Q", [[:bd<CR>]])
 vim.keymap.set("n", "<C-f>", "<cmd>silent !tmux neww tmux-sessionizer<CR>")
 vim.keymap.set('n', '<leader>f', ':lua vim.lsp.buf.format({ async = true })<CR>', { silent = true, noremap = true })
 vim.keymap.set('x', '<leader>f', ':lua vim.lsp.buf.format()<CR>', { silent = true, noremap = true })

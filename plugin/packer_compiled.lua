@@ -124,6 +124,11 @@ _G.packer_plugins = {
     path = "/Users/salmanjaved/.local/share/nvim/site/pack/packer/start/gitsigns.nvim",
     url = "https://github.com/lewis6991/gitsigns.nvim"
   },
+  logsitter = {
+    loaded = true,
+    path = "/Users/salmanjaved/.local/share/nvim/site/pack/packer/start/logsitter",
+    url = "https://github.com/gaelph/logsitter"
+  },
   ["lsp-zero.nvim"] = {
     loaded = true,
     path = "/Users/salmanjaved/.local/share/nvim/site/pack/packer/start/lsp-zero.nvim",
