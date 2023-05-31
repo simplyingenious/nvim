@@ -28,6 +28,9 @@ vim.keymap.set("n", "<C-f>", "<cmd>silent !tmux neww tmux-sessionizer<CR>")
 vim.keymap.set('n', '<leader>f', ':lua vim.lsp.buf.format({ async = true })<CR>', { silent = true, noremap = true })
 vim.keymap.set('x', '<leader>f', ':lua vim.lsp.buf.format()<CR>', { silent = true, noremap = true })
 
+vim.keymap.set("n", "<leader>gl", [[:G pull<CR>]])
+vim.keymap.set("n", "<leader>gp", [[:G push<CR>]])
+
 vim.keymap.set("n", "<C-k>", "<cmd>cnext<CR>zz")
 vim.keymap.set("n", "<C-j>", "<cmd>cprev<CR>zz")
 vim.keymap.set("n", "<leader>k", "<cmd>lnext<CR>zz")
