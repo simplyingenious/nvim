@@ -111,10 +111,18 @@ require("lazy").setup({
 
   -- { 'jose-elias-alvarez/null-ls.nvim' },
   -- { 'JoosepAlviste/nvim-ts-context-commentstring' },
-  { 'windwp/nvim-autopairs',        opts = {} },
-  { 'windwp/nvim-ts-autotag',       opts = {} },
-  { 'kylechui/nvim-surround',       opts = {} },
-  { 'numToStr/Comment.nvim',        opts = {}, lazy = false },
+  { 'windwp/nvim-autopairs',  opts = {} },
+  { 'windwp/nvim-ts-autotag', opts = {} },
+  { 'kylechui/nvim-surround', opts = {} },
+  {
+    'numToStr/Comment.nvim',
+    opts = function()
+      require('Comment').setup {
+        pre_hook = require('ts_context_commentstring.integrations.comment_nvim').create_pre_hook(),
+      }
+    end,
+    lazy = false
+  },
   { 'lewis6991/gitsigns.nvim',      opts = {} },
   { 'editorconfig/editorconfig-vim' },
   { 'norcalli/nvim-colorizer.lua',  opts = {} },
