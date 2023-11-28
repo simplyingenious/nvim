@@ -35,7 +35,8 @@ autocmd('TextYankPost', {
 })
 
 if vim.g.neovide then
-  vim.o.guifont = "ellograph_cf:h14"
+  vim.o.guifont = "0xProto:h13"
+  vim.o.linespace = 6
 
   vim.g.neovide_padding_top = 8
   vim.g.neovide_padding_bottom = 8
