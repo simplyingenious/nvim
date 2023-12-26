@@ -73,11 +73,6 @@ require("lazy").setup({
         autopairs = {
           enable = true,
         },
-
-        context_commentstring = {
-          enable = true,
-          enable_autocmd = false,
-        }
       })
     end
   },
@@ -93,6 +88,10 @@ require("lazy").setup({
       { 'williamboman/mason.nvim' },           -- Optional
       { 'williamboman/mason-lspconfig.nvim' }, -- Optional
 
+      -- Snippets
+      { 'L3MON4D3/LuaSnip' },             -- Required
+      { 'rafamadriz/friendly-snippets' }, -- Optional
+
       -- Autocompletion
       { 'hrsh7th/nvim-cmp' },         -- Required
       { 'hrsh7th/cmp-nvim-lsp' },     -- Required
@@ -101,16 +100,16 @@ require("lazy").setup({
       { 'saadparwaiz1/cmp_luasnip' }, -- Optional
       { 'hrsh7th/cmp-nvim-lua' },     -- Optional
 
-      -- Snippets
-      { 'L3MON4D3/LuaSnip' },             -- Required
-      { 'rafamadriz/friendly-snippets' }, -- Optional
-
       -- Additional Plugins
     }
   },
 
-  -- { 'jose-elias-alvarez/null-ls.nvim' },
-  -- { 'JoosepAlviste/nvim-ts-context-commentstring' },
+  {
+    'JoosepAlviste/nvim-ts-context-commentstring',
+    opts = function()
+      vim.g.skip_ts_context_commentstring_module = true
+    end
+  },
   { 'windwp/nvim-autopairs',  opts = {} },
   { 'windwp/nvim-ts-autotag', opts = {} },
   { 'kylechui/nvim-surround', opts = {} },
@@ -124,7 +123,12 @@ require("lazy").setup({
     lazy = false
   },
   { 'lewis6991/gitsigns.nvim',      opts = {} },
-  { 'editorconfig/editorconfig-vim' },
-  { 'norcalli/nvim-colorizer.lua',  opts = {} },
+  {
+    'norcalli/nvim-colorizer.lua',
+    event = { "BufRead", "BufNewFile" },
+    config = function()
+      require 'colorizer'.setup()
+    end
+  },
   -- { 'RRethy/vim-illuminate', opts = {} },
 })
