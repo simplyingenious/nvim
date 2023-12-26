@@ -4,11 +4,21 @@ lsp.preset('recommended')
 
 lsp.ensure_installed({
   'html',
-  'cssmodules_ls',
   'tsserver',
   'emmet_ls',
   'stylelint_lsp',
   'eslint'
+})
+
+-- Fix Undefined global 'vim'
+lsp.configure('lua-language-server', {
+  settings = {
+    Lua = {
+      diagnostics = {
+        globals = { 'vim' }
+      }
+    }
+  }
 })
 
 lsp.configure('eslint', {
@@ -32,9 +42,10 @@ lsp.configure('stylelint_lsp', {
 })
 
 
+
 local cmp = require('cmp')
 local cmp_select = { behavior = cmp.SelectBehavior.Select }
-local cmp_mappings = lsp.defaults.cmp_mappings({
+local cmp_mappings = cmp.mapping.preset.insert({
   ['<C-p>'] = cmp.mapping.select_prev_item(cmp_select),
   ['<C-n>'] = cmp.mapping.select_next_item(cmp_select),
   ['<CR>'] = cmp.mapping.confirm({ select = true }),
@@ -44,38 +55,12 @@ local cmp_mappings = lsp.defaults.cmp_mappings({
 cmp_mappings['<Tab>'] = nil
 cmp_mappings['<S-Tab>'] = nil
 
-lsp.setup_nvim_cmp({
-  mapping = cmp_mappings
+cmp.setup({
+  mapping = cmp_mappings,
 })
 
 
 lsp.setup()
-
-
--- local null_ls = require("null-ls")
--- local null_opts = lsp.build_options('null-ls', {})
--- local formatting = null_ls.builtins.formatting
--- local code_actions = null_ls.builtins.code_actions
--- local diagnostics = null_ls.builtins.diagnostics
---
--- null_ls.setup({
---   debug = true,
---   sources = {
---     -- code_actions.eslint_d,
---     -- formatting.eslint_d,
---     -- diagnostics.eslint_d,
---     -- diagnostics.stylelint,
---     formatting.prettierd,
---     -- formatting.stylelint,
---   },
---   on_attach = function(client, bufnr)
---     null_opts.on_attach(client, bufnr)
---     if client.server_capabilities.documentFormattingProvider then
---       vim.keymap.set('n', '<leader>f', ':lua vim.lsp.buf.format({ async = true })<CR>',
---         { silent = true, buffer = true })
---     end
---   end,
--- })
 
 
 vim.diagnostic.config({
