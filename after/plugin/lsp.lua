@@ -44,6 +44,7 @@ lsp.configure('stylelint_lsp', {
 
 
 local cmp = require('cmp')
+local ls = require('luasnip')
 local cmp_select = { behavior = cmp.SelectBehavior.Select }
 local cmp_mappings = cmp.mapping.preset.insert({
   ['<C-p>'] = cmp.mapping.select_prev_item(cmp_select),
