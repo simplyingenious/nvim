@@ -15,6 +15,9 @@ require("lazy").setup({
     dependencies = { 'nvim-lua/plenary.nvim' },
     opts = function()
       local builtin = require('telescope.builtin')
+      local trouble = require("trouble.providers.telescope")
+      local actions = require "telescope.actions"
+
       vim.keymap.set('n', '<leader>pf', builtin.find_files, {})
       vim.keymap.set('n', '<C-p>', builtin.git_files, {})
       vim.keymap.set('n', '<leader>pb', function()
@@ -32,6 +35,27 @@ require("lazy").setup({
       vim.keymap.set('n', '<leader>ps', function()
         builtin.grep_string({ search = vim.fn.input("Grep ❯ ") })
       end)
+
+      require('telescope').setup {
+        defaults = {
+          mappings = {
+            i = { ["<C-t>"] = trouble.open_with_trouble },
+            n = { ["<C-t>"] = trouble.open_with_trouble },
+          }
+        },
+        pickers = {
+          buffers = {
+            mappings = {
+              n = {
+                ["bd"] = actions.delete_buffer + actions.move_to_top,
+              },
+              i = {
+                ["<C-d>"] = actions.delete_buffer + actions.move_to_top,
+              }
+            }
+          }
+        }
+      }
     end
   },
 
@@ -142,23 +166,23 @@ require("lazy").setup({
 
         -- Navigation
         map({ "n", "v" }, "]c", function()
-        	if vim.wo.diff then
-        		return "]c"
-        	end
-        	vim.schedule(function()
-        		gs.next_hunk()
-        	end)
-        	return "<Ignore>"
+          if vim.wo.diff then
+            return "]c"
+          end
+          vim.schedule(function()
+            gs.next_hunk()
+          end)
+          return "<Ignore>"
         end, { expr = true, desc = "Jump to next hunk" })
 
         map({ "n", "v" }, "[c", function()
-        	if vim.wo.diff then
-        		return "[c"
-        	end
-        	vim.schedule(function()
-        		gs.prev_hunk()
-        	end)
-        	return "<Ignore>"
+          if vim.wo.diff then
+            return "[c"
+          end
+          vim.schedule(function()
+            gs.prev_hunk()
+          end)
+          return "<Ignore>"
         end, { expr = true, desc = "Jump to previous hunk" })
 
         -- Actions
@@ -189,6 +213,11 @@ require("lazy").setup({
         map("n", "<leader>td", gs.toggle_deleted, { desc = "toggle git show deleted" })
       end,
     }
+  },
+  {
+    "folke/trouble.nvim",
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+    opts = {},
   },
   {
     'norcalli/nvim-colorizer.lua',
