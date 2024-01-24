@@ -7,7 +7,8 @@ lsp.ensure_installed({
   'tsserver',
   'emmet_ls',
   'stylelint_lsp',
-  'eslint'
+  'eslint',
+  'biome',
 })
 
 -- Fix Undefined global 'vim'
@@ -21,11 +22,11 @@ lsp.configure('lua-language-server', {
   }
 })
 
-lsp.configure('eslint', {
-  settings = {
-    filetypes = { 'html', 'javascript', 'javascriptreact' },
-  }
-})
+-- lsp.configure('eslint', {
+--   settings = {
+--     filetypes = { 'html', 'javascript', 'javascriptreact' },
+--   }
+-- })
 
 lsp.configure('emmet_ls', {
   settings = {
