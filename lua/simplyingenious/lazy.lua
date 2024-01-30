@@ -74,7 +74,14 @@ require("lazy").setup({
     end
   },
 
-  -- { 'tpope/vim-fugitive' },
+  -- Autocompletion
+  {
+    'hrsh7th/nvim-cmp',
+    event = { "InsertEnter", "CmdlineEnter" }
+  },
+  { 'hrsh7th/cmp-nvim-lsp' },
+  { 'hrsh7th/cmp-buffer' },
+  { 'hrsh7th/cmp-path' },
 
   {
     'JoosepAlviste/nvim-ts-context-commentstring',
