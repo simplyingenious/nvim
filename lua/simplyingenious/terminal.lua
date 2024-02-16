@@ -8,7 +8,7 @@ au BufEnter * if &buftype == 'terminal' | :startinsert | endif
 
 " open terminal on ctrl+n
 function! OpenTerminal()
-  split term://zsh
+  split term://ash
   resize 15
 endfunction
 ]]

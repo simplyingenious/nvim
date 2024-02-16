@@ -1,12 +1,13 @@
 require("lazy").setup({
   {
-    "rose-pine/neovim",
+    "mcchrish/zenbones.nvim",
     lazy = false,    -- make sure we load this during startup if it is your main colorscheme
     priority = 1000, -- make sure to load this before all the other start plugins
-    name = 'rose-pine',
+    name = 'zenbones',
     config = function()
-      vim.cmd([[colorscheme rose-pine]])
+      vim.cmd([[colorscheme zenbones]])
     end,
+    dependencies = {"rktjmp/lush.nvim"}
   },
 
   {

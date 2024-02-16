@@ -1,5 +1,5 @@
 function ColorIt(color)
-	color = color or "rose-pine"
+	color = color or "zenbones"
 	vim.cmd.colorscheme(color)
 end
 
