@@ -12,11 +12,11 @@ require("lazy").setup({
   { 'nvim-telescope/telescope-fzf-native.nvim', build = 'make' },
   {
     'nvim-telescope/telescope.nvim',
-    tag = '0.1.2',
+    branch = '0.1.x',
     dependencies = { 'nvim-lua/plenary.nvim' },
     opts = function()
       local builtin = require('telescope.builtin')
-      local trouble = require("trouble.providers.telescope")
+      local open_with_trouble = require("trouble.sources.telescope").open
       local actions = require "telescope.actions"
 
       vim.keymap.set('n', '<leader>pf', builtin.find_files, {})
@@ -40,8 +40,8 @@ require("lazy").setup({
       require('telescope').setup {
         defaults = {
           mappings = {
-            i = { ["<C-t>"] = trouble.open_with_trouble },
-            n = { ["<C-t>"] = trouble.open_with_trouble },
+            i = { ["<C-t>"] = open_with_trouble },
+            n = { ["<C-t>"] = open_with_trouble },
           }
         },
         pickers = {
@@ -50,9 +50,6 @@ require("lazy").setup({
               n = {
                 ["bd"] = actions.delete_buffer + actions.move_to_top,
               },
-              i = {
-                ["<C-d>"] = actions.delete_buffer + actions.move_to_top,
-              }
             }
           }
         },
@@ -100,9 +97,7 @@ require("lazy").setup({
           additional_vim_regex_highlighting = false,
         },
 
-        autotag = {
-          enable = true,
-        },
+        require('nvim-ts-autotag').setup(),
 
         autopairs = {
           enable = true,
@@ -110,6 +105,7 @@ require("lazy").setup({
       })
     end
   },
+  { 'nvim-treesitter/nvim-treesitter-context',  opts = {} },
 
   { 'tpope/vim-fugitive' },
 
@@ -227,6 +223,38 @@ require("lazy").setup({
   {
     "folke/trouble.nvim",
     dependencies = { "nvim-tree/nvim-web-devicons" },
+    -- keys = {
+    --   {
+    --     "<leader>xx",
+    --     "<cmd>Trouble diagnostics toggle<cr>",
+    --     desc = "Diagnostics (Trouble)",
+    --   },
+    --   {
+    --     "<leader>xX",
+    --     "<cmd>Trouble diagnostics toggle filter.buf=0<cr>",
+    --     desc = "Buffer Diagnostics (Trouble)",
+    --   },
+    --   {
+    --     "<leader>cs",
+    --     "<cmd>Trouble symbols toggle focus=false<cr>",
+    --     desc = "Symbols (Trouble)",
+    --   },
+    --   {
+    --     "<leader>cl",
+    --     "<cmd>Trouble lsp toggle focus=false win.position=right<cr>",
+    --     desc = "LSP Definitions / references / ... (Trouble)",
+    --   },
+    --   {
+    --     "<leader>xL",
+    --     "<cmd>Trouble loclist toggle<cr>",
+    --     desc = "Location List (Trouble)",
+    --   },
+    --   {
+    --     "<leader>xQ",
+    --     "<cmd>Trouble qflist toggle<cr>",
+    --     desc = "Quickfix List (Trouble)",
+    --   },
+    -- },
     opts = {},
   },
   {
@@ -240,6 +268,36 @@ require("lazy").setup({
     "folke/todo-comments.nvim",
     dependencies = { "nvim-lua/plenary.nvim" },
     opts = {}
+  },
+  -- {
+  --   "Exafunction/codeium.nvim",
+  --   dependencies = {
+  --     "nvim-lua/plenary.nvim",
+  --     "hrsh7th/nvim-cmp",
+  --   },
+  --   event = 'BufEnter',
+  --   config = function()
+  --     require("codeium").setup({
+  --       vim.keymap.set('i', '<C-g>', function() return vim.fn['codeium#Accept']() end, { expr = true, silent = true }),
+  --       vim.keymap.set('i', '<c-;>', function() return vim.fn['codeium#CycleCompletions'](1) end,
+  --         { expr = true, silent = true }),
+  --       vim.keymap.set('i', '<c-,>', function() return vim.fn['codeium#CycleCompletions'](-1) end,
+  --         { expr = true, silent = true }),
+  --       vim.keymap.set('i', '<c-x>', function() return vim.fn['codeium#Clear']() end, { expr = true, silent = true })
+  --     })
+  --   end
+  -- },
+  {
+    'Exafunction/codeium.vim',
+    event = 'BufEnter',
+    config = function()
+      vim.keymap.set('i', '<C-g>', function() return vim.fn['codeium#Accept']() end, { expr = true, silent = true })
+      vim.keymap.set('i', '<c-;>', function() return vim.fn['codeium#CycleCompletions'](1) end,
+        { expr = true, silent = true })
+      vim.keymap.set('i', '<c-,>', function() return vim.fn['codeium#CycleCompletions'](-1) end,
+        { expr = true, silent = true })
+      vim.keymap.set('i', '<c-x>', function() return vim.fn['codeium#Clear']() end, { expr = true, silent = true })
+    end
   },
   -- { 'RRethy/vim-illuminate', opts = {} },
 })

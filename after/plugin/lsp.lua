@@ -22,12 +22,6 @@ lsp.configure('lua-language-server', {
   }
 })
 
--- lsp.configure('eslint', {
---   settings = {
---     filetypes = { 'html', 'javascript', 'javascriptreact' },
---   }
--- })
-
 lsp.configure('emmet_ls', {
   settings = {
     filetypes = { 'html', 'javascript', 'javascriptreact', 'css', 'sass', 'scss', 'less' },
@@ -54,16 +48,21 @@ local cmp_mappings = cmp.mapping.preset.insert({
   ["<C-Space>"] = cmp.mapping.complete(),
 })
 
+-- local cmp_sources = cmp.get_config()
+--
+-- table.insert(cmp_sources.sources, {
+--    name = 'codeium',
+-- })
+
 cmp_mappings['<Tab>'] = nil
 cmp_mappings['<S-Tab>'] = nil
 
 cmp.setup({
   mapping = cmp_mappings,
+  -- sources = cmp_sources,
 })
 
-
 lsp.setup()
-
 
 vim.diagnostic.config({
   virtual_text = true
