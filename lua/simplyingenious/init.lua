@@ -46,6 +46,20 @@ if vim.g.neovide then
   vim.g.neovide_cursor_vfx_mode = "pixiedust"
   vim.g.neovide_cursor_vfx_particle_density = 8.0
 
+  vim.opt.title = true
+  vim.opt.titlelen = 0 -- do not shorten title
+  -- vim.opt.titlestring = '%{expand("%:t")} – %{expand("%:p:h:t")}'
+
+  local function set_relative_title()
+    local folder = vim.fn.expand('%:p:h:t') -- Parent folder name
+    local file = vim.fn.expand('%:t')       -- File name
+    local title = file .. ' – ' .. folder
+    vim.cmd('silent !title ' .. title)
+  end
+
+  vim.api.nvim_create_autocmd("BufEnter", { callback = set_relative_title })
+
+
   vim.keymap.set('n', '<D-s>', ':w<CR>')      -- Save
   vim.keymap.set('v', '<D-c>', '"+y')         -- Copy
   vim.keymap.set('n', '<D-v>', '"+P')         -- Paste normal mode
