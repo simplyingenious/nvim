@@ -85,8 +85,7 @@ require("lazy").setup({
       local configs = require("nvim-treesitter.configs")
 
       configs.setup({
-        -- A list of parser names, or "all" (the four listed parsers should always be installed)
-        ensure_installed = { "javascript", "typescript", "css", "lua", "vim" },
+        ensure_installed = { "javascript", "css", "lua", "vim" },
 
         -- Install parsers synchronously (only applied to `ensure_installed`)
         sync_install = false,
@@ -116,6 +115,12 @@ require("lazy").setup({
   },
   { 'nvim-treesitter/nvim-treesitter-context',  opts = {} },
 
+  {
+    "pmizio/typescript-tools.nvim",
+    dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
+    opts = {},
+  },
+
   { 'tpope/vim-fugitive' },
 
   {
@@ -124,8 +129,8 @@ require("lazy").setup({
     dependencies = {
       -- LSP Support
       { 'neovim/nvim-lspconfig' },             -- Required
-      { 'williamboman/mason.nvim' },           -- Optional
-      { 'williamboman/mason-lspconfig.nvim' }, -- Optional
+      { 'mason-org/mason.nvim', opts = {} },           -- Optional
+      { 'mason-org/mason-lspconfig.nvim' }, -- Optional
 
       -- Snippets
       {
@@ -137,6 +142,7 @@ require("lazy").setup({
       -- Autocompletion
       {
         'hrsh7th/nvim-cmp',
+        commit = "b356f2c",
         event = { "InsertEnter", "CmdlineEnter" }
       },                              -- Required
       { 'hrsh7th/cmp-nvim-lsp' },     -- Required
@@ -231,40 +237,40 @@ require("lazy").setup({
   },
   {
     "folke/trouble.nvim",
-    dependencies = { "nvim-tree/nvim-web-devicons" },
-    -- keys = {
-    --   {
-    --     "<leader>xx",
-    --     "<cmd>Trouble diagnostics toggle<cr>",
-    --     desc = "Diagnostics (Trouble)",
-    --   },
-    --   {
-    --     "<leader>xX",
-    --     "<cmd>Trouble diagnostics toggle filter.buf=0<cr>",
-    --     desc = "Buffer Diagnostics (Trouble)",
-    --   },
-    --   {
-    --     "<leader>cs",
-    --     "<cmd>Trouble symbols toggle focus=false<cr>",
-    --     desc = "Symbols (Trouble)",
-    --   },
-    --   {
-    --     "<leader>cl",
-    --     "<cmd>Trouble lsp toggle focus=false win.position=right<cr>",
-    --     desc = "LSP Definitions / references / ... (Trouble)",
-    --   },
-    --   {
-    --     "<leader>xL",
-    --     "<cmd>Trouble loclist toggle<cr>",
-    --     desc = "Location List (Trouble)",
-    --   },
-    --   {
-    --     "<leader>xQ",
-    --     "<cmd>Trouble qflist toggle<cr>",
-    --     desc = "Quickfix List (Trouble)",
-    --   },
-    -- },
-    opts = {},
+    opts = {}, -- for default options, refer to the configuration section for custom setup.
+    cmd = "Trouble",
+    keys = {
+      {
+        "<leader>xx",
+        "<cmd>Trouble diagnostics toggle<cr>",
+        desc = "Diagnostics (Trouble)",
+      },
+      {
+        "<leader>xX",
+        "<cmd>Trouble diagnostics toggle filter.buf=0<cr>",
+        desc = "Buffer Diagnostics (Trouble)",
+      },
+      {
+        "<leader>cs",
+        "<cmd>Trouble symbols toggle focus=false<cr>",
+        desc = "Symbols (Trouble)",
+      },
+      {
+        "<leader>cl",
+        "<cmd>Trouble lsp toggle focus=false win.position=right<cr>",
+        desc = "LSP Definitions / references / ... (Trouble)",
+      },
+      {
+        "<leader>xL",
+        "<cmd>Trouble loclist toggle<cr>",
+        desc = "Location List (Trouble)",
+      },
+      {
+        "<leader>xQ",
+        "<cmd>Trouble qflist toggle<cr>",
+        desc = "Quickfix List (Trouble)",
+      },
+    },
   },
   {
     'norcalli/nvim-colorizer.lua',
@@ -309,4 +315,30 @@ require("lazy").setup({
     end
   },
   -- { 'RRethy/vim-illuminate', opts = {} },
+  {
+    "olimorris/codecompanion.nvim",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "nvim-treesitter/nvim-treesitter",
+      "hrsh7th/nvim-cmp",                      -- Optional: For using slash commands and variables in the chat buffer
+      "nvim-telescope/telescope.nvim",         -- Optional: For using slash commands
+      { "stevearc/dressing.nvim", opts = {} }, -- Optional: Improves `vim.ui.select`
+    },
+    config = true
+  },
+  {
+    "mg979/vim-visual-multi",
+    event = { "BufRead", "BufNewFile" },
+  },
+  {
+    'stevearc/oil.nvim',
+    ---@module 'oil'
+    ---@type oil.SetupOpts
+    opts = {},
+    -- Optional dependencies
+    dependencies = { { "echasnovski/mini.icons", opts = {} } },
+    -- dependencies = { "nvim-tree/nvim-web-devicons" }, -- use if you prefer nvim-web-devicons
+    -- Lazy loading is not recommended because it is very tricky to make it work correctly in all situations.
+    lazy = false,
+  }
 })

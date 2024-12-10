@@ -34,5 +34,32 @@ ls.add_snippets(nil, {
     }, {
       text("console.info("), insert(1), text(")")
     })
+  },
+  javascriptreact = {
+    snip({
+      trig = "ci",
+      namr = "Console Info",
+      dscr = "console.info",
+    }, {
+      text("console.info("), insert(1), text(")")
+    })
+  },
+  typescript = {
+    snip({
+      trig = "ci",
+      namr = "Console Info",
+      dscr = "console.info",
+    }, {
+      text("console.info("), insert(1), text(")")
+    })
+  },
+  typescriptreact = {
+    snip({
+      trig = "ci",
+      namr = "Console Info",
+      dscr = "console.info",
+    }, {
+      text("console.info("), insert(1), text(")")
+    })
   }
 })

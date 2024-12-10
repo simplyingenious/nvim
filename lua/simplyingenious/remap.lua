@@ -1,5 +1,6 @@
 vim.g.mapleader = " "
 vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
+vim.keymap.set("n", "<leader>po", vim.cmd.Oil)
 
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
@@ -34,6 +35,7 @@ vim.keymap.set("n", "<leader>gj", [[:diffget //3<CR>]])
 
 vim.keymap.set("n", "<leader>gl", [[:G pull<CR>]])
 vim.keymap.set("n", "<leader>gp", [[:G push<CR>]])
+vim.keymap.set("n", "<leader>gw", [[:Gwrite<CR>]])
 
 vim.keymap.set("n", "<C-k>", "<cmd>cnext<CR>zz")
 vim.keymap.set("n", "<C-j>", "<cmd>cprev<CR>zz")
@@ -44,5 +46,5 @@ vim.keymap.set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><
 vim.keymap.set("n", "<leader>x", "<cmd>!chmod +x %<CR>", { silent = true })
 
 -- terminal
-vim.keymap.set("n", "<C-n>", ":call OpenTerminal()<CR>")
+vim.keymap.set("n", "<C-t>", ":call OpenTerminal()<CR>")
 vim.keymap.set("t", "<Esc>", "<C-\\><C-n>")
