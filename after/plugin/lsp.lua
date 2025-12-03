@@ -25,12 +25,6 @@ lsp.configure('lua-language-server', {
   }
 })
 
-lsp.configure('eslint', {
-  root_dir = require('lspconfig.util').find_git_ancestor,
-})
-
-
-
 local lspconfig = require('lspconfig')
 local util = lspconfig.util
 

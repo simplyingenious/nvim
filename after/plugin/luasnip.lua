@@ -29,8 +29,8 @@ ls.add_snippets(nil, {
   javascript = {
     snip({
       trig = "ci",
-      namr = "Console Info",
-      dscr = "console.info",
+      name = "Console Info",
+      desc = "console.info",
     }, {
       text("console.info("), insert(1), text(")")
     })
@@ -38,8 +38,8 @@ ls.add_snippets(nil, {
   javascriptreact = {
     snip({
       trig = "ci",
-      namr = "Console Info",
-      dscr = "console.info",
+      name = "Console Info",
+      desc = "console.info",
     }, {
       text("console.info("), insert(1), text(")")
     })
@@ -47,8 +47,8 @@ ls.add_snippets(nil, {
   typescript = {
     snip({
       trig = "ci",
-      namr = "Console Info",
-      dscr = "console.info",
+      name = "Console Info",
+      desc = "console.info",
     }, {
       text("console.info("), insert(1), text(")")
     })
@@ -56,8 +56,8 @@ ls.add_snippets(nil, {
   typescriptreact = {
     snip({
       trig = "ci",
-      namr = "Console Info",
-      dscr = "console.info",
+      name = "Console Info",
+      desc = "console.info",
     }, {
       text("console.info("), insert(1), text(")")
     })

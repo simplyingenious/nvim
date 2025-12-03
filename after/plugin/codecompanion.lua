@@ -19,6 +19,18 @@ require("codecompanion").setup({
         }
       })
     end,
+    xai = function()
+      return require("codecompanion.adapters").extend("xai", {
+        env = {
+          api_key = vim.env.NVIM_CODE_COMPANION_XAI_API_KEY
+        },
+        schema = {
+          model = {
+            default = "grok-code-fast",
+          },
+        },
+      })
+    end,
   },
   strategies = {
     chat = {
