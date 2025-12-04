@@ -1,32 +1,14 @@
-local lsp = require('lsp-zero')
+-- Global capabilities
+local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
-lsp.preset('recommended')
-
-lsp.ensure_installed({
-  'html',
-  'emmet_ls',
-  'stylelint_lsp',
-  'eslint',
-  'biome',
-  'cssls',
-  'cssmodules_ls',
-  'css_variables',
-  'somesass_ls'
+-- Global on_attach
+vim.lsp.config('*', {
+  capabilities = capabilities,
+  on_attach = function(client, bufnr)
+    -- LSP keymaps
+    vim.keymap.set('n', '<leader>f', vim.lsp.buf.format, { buffer = bufnr, desc = 'Format buffer' })
+  end,
 })
-
--- Fix Undefined global 'vim'
-lsp.configure('lua-language-server', {
-  settings = {
-    Lua = {
-      diagnostics = {
-        globals = { 'vim' }
-      }
-    }
-  }
-})
-
-local lspconfig = require('lspconfig')
-local util = lspconfig.util
 
 -- Define ESLint configuration file patterns
 local eslint_config_files = {
@@ -50,17 +32,26 @@ local function has_eslint_config(dir)
   return false
 end
 
-lspconfig.eslint.setup({
+vim.lsp.config('lua_ls', {
+  settings = {
+    Lua = {
+      diagnostics = {
+        globals = { 'vim' }
+      }
+    }
+  }
+})
+
+vim.lsp.config('eslint', {
   root_dir = function(fname)
     -- 1. Try to find ESLint config in current file's ancestry
-    local eslint_root = util.root_pattern(eslint_config_files)(fname)
+    local eslint_root = vim.fs.dirname(vim.fs.find(eslint_config_files, { upward = true, path = fname })[1])
     if eslint_root then
       return eslint_root
     end
 
     -- 2. Fall back to Git repository root (monorepo root)
-    local git_root = util.find_git_ancestor(fname)
-    -- root_dir = require('lspconfig.util').find_git_ancestor,
+    local git_root = vim.fs.dirname(vim.fs.find({'.git'}, { upward = true, path = fname })[1])
     if git_root and has_eslint_config(git_root) then
       return git_root
     end
@@ -70,16 +61,11 @@ lspconfig.eslint.setup({
   end,
 })
 
-
-
-
-lsp.configure('emmet_ls', {
-  settings = {
-    filetypes = { 'html', 'javascript', 'javascriptreact', 'typescript', 'typescriptreact', 'css', 'sass', 'scss', 'less' },
-  }
+vim.lsp.config('emmet_ls', {
+  filetypes = { 'html', 'javascript', 'javascriptreact', 'typescript', 'typescriptreact', 'css', 'sass', 'scss', 'less' },
 })
 
-lsp.configure('stylelint_lsp', {
+vim.lsp.config('stylelint_lsp', {
   settings = {
     stylelintplus = {
       autoFixOnFormat = true
@@ -87,7 +73,27 @@ lsp.configure('stylelint_lsp', {
   }
 })
 
+-- Setup servers without special config
+vim.lsp.config('html', {})
+vim.lsp.config('biome', {})
+vim.lsp.config('cssls', {})
+vim.lsp.config('cssmodules_ls', {})
+vim.lsp.config('css_variables', {})
+vim.lsp.config('somesass_ls', {})
 
+-- Enable the servers
+vim.lsp.enable('lua_ls')
+vim.lsp.enable('eslint')
+vim.lsp.enable('emmet_ls')
+vim.lsp.enable('stylelint_lsp')
+vim.lsp.enable('html')
+vim.lsp.enable('biome')
+vim.lsp.enable('cssls')
+vim.lsp.enable('cssmodules_ls')
+vim.lsp.enable('css_variables')
+vim.lsp.enable('somesass_ls')
+
+require('typescript-tools').setup({})
 
 local cmp = require('cmp')
 local ls = require('luasnip')
@@ -110,10 +116,14 @@ cmp_mappings['<S-Tab>'] = nil
 
 cmp.setup({
   mapping = cmp_mappings,
-  -- sources = cmp_sources,
+  sources = {
+    { name = 'nvim_lsp' },
+    { name = 'luasnip' },
+    { name = 'buffer' },
+    { name = 'path' },
+    { name = 'nvim_lua' },
+  },
 })
-
-lsp.setup()
 
 vim.diagnostic.config({
   virtual_text = true

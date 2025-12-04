@@ -21,7 +21,7 @@ require("lazy").setup({
   { 'nvim-telescope/telescope-fzf-native.nvim', build = 'make' },
   {
     'nvim-telescope/telescope.nvim',
-    branch = '0.1.x',
+    branch = 'master',
     dependencies = { 'nvim-lua/plenary.nvim' },
     opts = function()
       local builtin = require('telescope.builtin')
@@ -121,46 +121,28 @@ require("lazy").setup({
     opts = {},
   },
 
-  { 'tpope/vim-fugitive' },
+   { 'tpope/vim-fugitive' },
 
-  {
-    'VonHeikemen/lsp-zero.nvim',
-    branch = 'v1.x',
-    dependencies = {
-      -- LSP Support
-      { 'neovim/nvim-lspconfig' },             -- Required
-      { 'mason-org/mason.nvim', opts = {} },           -- Optional
-      { 'mason-org/mason-lspconfig.nvim' }, -- Optional
+   {
+     "pmizio/typescript-tools.nvim",
+     dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
+     opts = {},
+   },
 
-      -- Snippets
-      {
-        'L3MON4D3/LuaSnip',
-        version = "v2.*",
-      },                                  -- Required
-      { 'rafamadriz/friendly-snippets' }, -- Optional
+   {
+     'L3MON4D3/LuaSnip',
+     version = "v2.*",
+   },
 
-      -- Autocompletion
-      {
-        'hrsh7th/nvim-cmp',
-        commit = "b356f2c",
-        event = { "InsertEnter", "CmdlineEnter" }
-      },                              -- Required
-      { 'hrsh7th/cmp-nvim-lsp' },     -- Required
-      { 'hrsh7th/cmp-buffer' },       -- Optional
-      { 'hrsh7th/cmp-path' },         -- Optional
-      { 'saadparwaiz1/cmp_luasnip' }, -- Optional
-      { 'hrsh7th/cmp-nvim-lua' },     -- Optional
-
-      -- Additional Plugins
-    }
-  },
-
-  {
-    'JoosepAlviste/nvim-ts-context-commentstring',
-    opts = function()
-      vim.g.skip_ts_context_commentstring_module = true
-    end
-  },
+   {
+     'hrsh7th/nvim-cmp',
+     event = { "InsertEnter", "CmdlineEnter" }
+   },
+   { 'hrsh7th/cmp-nvim-lsp' },
+   { 'hrsh7th/cmp-buffer' },
+   { 'hrsh7th/cmp-path' },
+   { 'saadparwaiz1/cmp_luasnip' },
+   { 'hrsh7th/cmp-nvim-lua' },
   { 'windwp/nvim-autopairs',  opts = {} },
   { 'windwp/nvim-ts-autotag', opts = {} },
   { 'kylechui/nvim-surround', opts = {} },
