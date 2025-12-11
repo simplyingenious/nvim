@@ -51,7 +51,7 @@ vim.lsp.config('eslint', {
     end
 
     -- 2. Fall back to Git repository root (monorepo root)
-    local git_root = vim.fs.dirname(vim.fs.find({'.git'}, { upward = true, path = fname })[1])
+    local git_root = vim.fs.dirname(vim.fs.find({ '.git' }, { upward = true, path = fname })[1])
     if git_root and has_eslint_config(git_root) then
       return git_root
     end

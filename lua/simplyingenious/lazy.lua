@@ -1,5 +1,14 @@
 require("lazy").setup({
   {
+    "shaunsingh/nord.nvim",
+    lazy = false,
+    priority = 1000,
+    name = "nord",
+    config = function()
+      vim.cmd([[colorscheme nord]])
+    end,
+  },
+  {
     "catppuccin/nvim",
     lazy = false,
     priority = 1000,
@@ -8,50 +17,50 @@ require("lazy").setup({
       vim.cmd([[colorscheme catppuccin]])
     end,
   },
-  -- {
-  --   "rose-pine/neovim",
-  --   lazy = false,    -- make sure we load this during startup if it is your main colorscheme
-  --   priority = 1000, -- make sure to load this before all the other start plugins
-  --   name = 'rose-pine',
-  --   config = function()
-  --     vim.cmd([[colorscheme rose-pine]])
-  --   end,
-  -- },
-
-  { 'nvim-telescope/telescope-fzf-native.nvim', build = 'make' },
   {
-    'nvim-telescope/telescope.nvim',
-    branch = 'master',
-    dependencies = { 'nvim-lua/plenary.nvim' },
-    opts = function()
-      local builtin = require('telescope.builtin')
-      local open_with_trouble = require("trouble.sources.telescope").open
-      local actions = require "telescope.actions"
+    "rose-pine/neovim",
+    lazy = false,    -- make sure we load this during startup if it is your main colorscheme
+    priority = 1000, -- make sure to load this before all the other start plugins
+    name = 'rose-pine',
+    config = function()
+      vim.cmd([[colorscheme rose-pine]])
+    end,
+  },
 
-      vim.keymap.set('n', '<leader>pf', builtin.find_files, {})
-      vim.keymap.set('n', '<C-p>', builtin.git_files, {})
-      vim.keymap.set('n', '<leader>pb', function()
+  { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
+  {
+    "nvim-telescope/telescope.nvim",
+    branch = "master",
+    dependencies = { "nvim-lua/plenary.nvim" },
+    opts = function()
+      local builtin = require("telescope.builtin")
+      local open_with_trouble = require("trouble.sources.telescope").open
+      local actions = require("telescope.actions")
+
+      vim.keymap.set("n", "<leader>pf", builtin.find_files, {})
+      vim.keymap.set("n", "<C-p>", builtin.git_files, {})
+      vim.keymap.set("n", "<leader>pb", function()
         builtin.buffers({ sort_lastused = true })
       end)
-      vim.keymap.set('n', '<leader>pw', function()
+      vim.keymap.set("n", "<leader>pw", function()
         builtin.grep_string({ search = vim.fn.expand("<cword>") })
       end)
-      vim.keymap.set('n', '<leader>psl', function()
+      vim.keymap.set("n", "<leader>psl", function()
         builtin.live_grep()
       end)
       -- vim.keymap.set('n', '<leader>ps', function()
       --   builtin.grep_string()
       -- end)
-      vim.keymap.set('n', '<leader>ps', function()
+      vim.keymap.set("n", "<leader>ps", function()
         builtin.grep_string({ search = vim.fn.input("Grep ❯ ") })
       end)
 
-      require('telescope').setup {
+      require("telescope").setup({
         defaults = {
           mappings = {
             i = { ["<C-t>"] = open_with_trouble },
             n = { ["<C-t>"] = open_with_trouble },
-          }
+          },
         },
         pickers = {
           buffers = {
@@ -59,28 +68,28 @@ require("lazy").setup({
               n = {
                 ["bd"] = actions.delete_buffer + actions.move_to_top,
               },
-            }
-          }
+            },
+          },
         },
         extensions = {
           fzf = {
-            fuzzy = true,                   -- false will only do exact matching
+            fuzzy = true, -- false will only do exact matching
             override_generic_sorter = true, -- override the generic sorter
-            override_file_sorter = true,    -- override the file sorter
-            case_mode = "smart_case",       -- or "ignore_case" or "respect_case"
+            override_file_sorter = true, -- override the file sorter
+            case_mode = "smart_case", -- or "ignore_case" or "respect_case"
             -- the default case_mode is "smart_case"
-          }
-        }
-      }
-      require('telescope').load_extension('fzf')
-    end
+          },
+        },
+      })
+      require("telescope").load_extension("fzf")
+    end,
   },
   {
-    'nvim-treesitter/nvim-treesitter',
+    "nvim-treesitter/nvim-treesitter",
     dependencies = {
-      'JoosepAlviste/nvim-ts-context-commentstring',
+      "JoosepAlviste/nvim-ts-context-commentstring",
     },
-    build = ':TSUpdate',
+    build = ":TSUpdate",
     config = function()
       local configs = require("nvim-treesitter.configs")
 
@@ -105,15 +114,70 @@ require("lazy").setup({
           additional_vim_regex_highlighting = false,
         },
 
-        require('nvim-ts-autotag').setup(),
+        require("nvim-ts-autotag").setup(),
 
         autopairs = {
           enable = true,
         },
       })
-    end
+    end,
   },
-  { 'nvim-treesitter/nvim-treesitter-context',  opts = {} },
+  { "nvim-treesitter/nvim-treesitter-context", opts = {} },
+
+  {
+    "pmizio/typescript-tools.nvim",
+    dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
+    opts = {},
+  },
+  {
+    "williamboman/mason-lspconfig.nvim",
+    opts = {
+      -- list of servers for mason to install
+      ensure_installed = {
+        "ts_ls",
+        "html",
+        "cssls",
+        "tailwindcss",
+        "svelte",
+        "lua_ls",
+        "graphql",
+        "emmet_ls",
+        "eslint",
+      },
+    },
+    dependencies = {
+      {
+        "williamboman/mason.nvim",
+        opts = {
+          ui = {
+            icons = {
+              package_installed = "✓",
+              package_pending = "➜",
+              package_uninstalled = "✗",
+            },
+          },
+        },
+      },
+      "neovim/nvim-lspconfig",
+    },
+  },
+  {
+    "WhoIsSethDaniel/mason-tool-installer.nvim",
+    opts = {
+      ensure_installed = {
+        "prettier", -- prettier formatter
+        "stylua", -- lua formatter
+        -- "isort",    -- python formatter
+        -- "black",    -- python formatter
+        -- "pylint",
+        "eslint_d",
+      },
+    },
+    dependencies = {
+      "williamboman/mason.nvim",
+    },
+  },
+  { "tpope/vim-fugitive" },
 
   {
     "pmizio/typescript-tools.nvim",
@@ -121,42 +185,35 @@ require("lazy").setup({
     opts = {},
   },
 
-   { 'tpope/vim-fugitive' },
-
-   {
-     "pmizio/typescript-tools.nvim",
-     dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
-     opts = {},
-   },
-
-   {
-     'L3MON4D3/LuaSnip',
-     version = "v2.*",
-   },
-
-   {
-     'hrsh7th/nvim-cmp',
-     event = { "InsertEnter", "CmdlineEnter" }
-   },
-   { 'hrsh7th/cmp-nvim-lsp' },
-   { 'hrsh7th/cmp-buffer' },
-   { 'hrsh7th/cmp-path' },
-   { 'saadparwaiz1/cmp_luasnip' },
-   { 'hrsh7th/cmp-nvim-lua' },
-  { 'windwp/nvim-autopairs',  opts = {} },
-  { 'windwp/nvim-ts-autotag', opts = {} },
-  { 'kylechui/nvim-surround', opts = {} },
+  { "rafamadriz/friendly-snippets" },
   {
-    'numToStr/Comment.nvim',
+    "L3MON4D3/LuaSnip",
+    version = "v2.*",
+  },
+
+  {
+    "hrsh7th/nvim-cmp",
+    event = { "InsertEnter", "CmdlineEnter" },
+  },
+  { "hrsh7th/cmp-nvim-lsp" },
+  { "hrsh7th/cmp-buffer" },
+  { "hrsh7th/cmp-path" },
+  { "saadparwaiz1/cmp_luasnip" },
+  { "hrsh7th/cmp-nvim-lua" },
+  { "windwp/nvim-autopairs", opts = {} },
+  { "windwp/nvim-ts-autotag", opts = {} },
+  { "kylechui/nvim-surround", opts = {} },
+  {
+    "numToStr/Comment.nvim",
     opts = function()
-      require('Comment').setup {
-        pre_hook = require('ts_context_commentstring.integrations.comment_nvim').create_pre_hook(),
-      }
+      require("Comment").setup({
+        pre_hook = require("ts_context_commentstring.integrations.comment_nvim").create_pre_hook(),
+      })
     end,
-    lazy = false
+    lazy = false,
   },
   {
-    'lewis6991/gitsigns.nvim',
+    "lewis6991/gitsigns.nvim",
     opts = {
       on_attach = function(bufnr)
         local gs = package.loaded.gitsigns
@@ -215,7 +272,7 @@ require("lazy").setup({
         map("n", "<leader>tb", gs.toggle_current_line_blame, { desc = "toggle git blame line" })
         map("n", "<leader>td", gs.toggle_deleted, { desc = "toggle git show deleted" })
       end,
-    }
+    },
   },
   {
     "folke/trouble.nvim",
@@ -255,59 +312,56 @@ require("lazy").setup({
     },
   },
   {
-    'norcalli/nvim-colorizer.lua',
+    "norcalli/nvim-colorizer.lua",
     event = { "BufRead", "BufNewFile" },
     config = function()
-      require 'colorizer'.setup()
-    end
+      require("colorizer").setup()
+    end,
   },
   {
     "folke/todo-comments.nvim",
     dependencies = { "nvim-lua/plenary.nvim" },
-    opts = {}
+    opts = {},
   },
-  -- {
-  --   'Exafunction/codeium.vim',
-  --   event = 'BufEnter',
-  --   config = function()
-  --     vim.keymap.set('i', '<C-g>', function() return vim.fn['codeium#Accept']() end, { expr = true, silent = true })
-  --     vim.keymap.set('i', '<c-;>', function() return vim.fn['codeium#CycleCompletions'](1) end,
-  --       { expr = true, silent = true })
-  --     vim.keymap.set('i', '<c-,>', function() return vim.fn['codeium#CycleCompletions'](-1) end,
-  --       { expr = true, silent = true })
-  --     vim.keymap.set('i', '<c-x>', function() return vim.fn['codeium#Clear']() end, { expr = true, silent = true })
-  --   end
-  -- },
 
   {
-    'Exafunction/windsurf.vim',
-    config = function ()
+    "Exafunction/windsurf.vim",
+    config = function()
       -- Change '<C-g>' here to any keycode you like.
-      vim.keymap.set('i', '<C-g>', function () return vim.fn['codeium#Accept']() end, { expr = true, silent = true })
-      vim.keymap.set('i', '<c-;>', function() return vim.fn['codeium#CycleCompletions'](1) end, { expr = true, silent = true })
-      vim.keymap.set('i', '<c-,>', function() return vim.fn['codeium#CycleCompletions'](-1) end, { expr = true, silent = true })
-      vim.keymap.set('i', '<c-x>', function() return vim.fn['codeium#Clear']() end, { expr = true, silent = true })
-    end
+      vim.keymap.set("i", "<C-g>", function()
+        return vim.fn["codeium#Accept"]()
+      end, { expr = true, silent = true })
+      vim.keymap.set("i", "<c-;>", function()
+        return vim.fn["codeium#CycleCompletions"](1)
+      end, { expr = true, silent = true })
+      vim.keymap.set("i", "<c-,>", function()
+        return vim.fn["codeium#CycleCompletions"](-1)
+      end, { expr = true, silent = true })
+      vim.keymap.set("i", "<c-x>", function()
+        return vim.fn["codeium#Clear"]()
+      end, { expr = true, silent = true })
+    end,
   },
 
   -- { 'RRethy/vim-illuminate', opts = {} },
   {
     "olimorris/codecompanion.nvim",
+    tag = "v17.33.0",
     dependencies = {
       "nvim-lua/plenary.nvim",
       "nvim-treesitter/nvim-treesitter",
-      "hrsh7th/nvim-cmp",                      -- Optional: For using slash commands and variables in the chat buffer
-      "nvim-telescope/telescope.nvim",         -- Optional: For using slash commands
+      "hrsh7th/nvim-cmp", -- Optional: For using slash commands and variables in the chat buffer
+      "nvim-telescope/telescope.nvim", -- Optional: For using slash commands
       { "stevearc/dressing.nvim", opts = {} }, -- Optional: Improves `vim.ui.select`
     },
-    config = true
+    config = true,
   },
   {
     "mg979/vim-visual-multi",
     event = { "BufRead", "BufNewFile" },
   },
   {
-    'stevearc/oil.nvim',
+    "stevearc/oil.nvim",
     ---@module 'oil'
     ---@type oil.SetupOpts
     opts = {},
@@ -316,5 +370,33 @@ require("lazy").setup({
     -- dependencies = { "nvim-tree/nvim-web-devicons" }, -- use if you prefer nvim-web-devicons
     -- Lazy loading is not recommended because it is very tricky to make it work correctly in all situations.
     lazy = false,
-  }
+  },
+  {
+    "dmtrKovalenko/fff.nvim",
+    build = function()
+      -- this will download prebuild binary or try to use existing rustup toolchain to build from source
+      -- (if you are using lazy you can use gb for rebuilding a plugin if needed)
+      require("fff.download").download_or_build_binary()
+    end,
+    -- if you are using nixos
+    -- build = "nix run .#release",
+    opts = { -- (optional)
+      debug = {
+        enabled = true, -- we expect your collaboration at least during the beta
+        show_scores = true, -- to help us optimize the scoring system, feel free to share your scores!
+      },
+    },
+    -- No need to lazy-load with lazy.nvim.
+    -- This plugin initializes itself lazily.
+    lazy = false,
+    keys = {
+      {
+        "ff", -- try it if you didn't it is a banger keybinding for a picker
+        function()
+          require("fff").find_files()
+        end,
+        desc = "FFFind files",
+      },
+    },
+  },
 })

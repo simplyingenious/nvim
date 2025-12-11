@@ -1,7 +1,6 @@
-function ColorIt(color)
-	-- color = color or "rose-pine"
+function Theme(color)
 	color = color or "catppuccin"
 	vim.cmd.colorscheme(color)
 end
 
-ColorIt()
+Theme()
