@@ -1,7 +1,7 @@
 vim.filetype.add({
-  extension = {
-    njk = "html",
-    ejs = "html",
-    cssm = "scss",
-  },
-});
+	extension = {
+		njk = 'html',
+		ejs = 'html',
+		cssm = 'scss',
+	},
+})

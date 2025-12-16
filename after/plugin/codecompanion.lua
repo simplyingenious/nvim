@@ -1,33 +1,33 @@
--- require("codecompanion").setup({
+-- require('codecompanion').setup({
 --   adapters = {
 --     http = {
 --       openai = function()
---         return require("codecompanion.adapters").extend("openai", {
+--         return require('codecompanion.adapters').extend('openai', {
 --           env = {
 --             api_key = vim.env.NVIM_CODE_COMPANION_OPENAI_API_KEY,
 --           },
 --         })
 --       end,
 --       anthropic = function()
---         return require("codecompanion.adapters").extend("anthropic", {
+--         return require('codecompanion.adapters').extend('anthropic', {
 --           env = {
 --             api_key = vim.env.NVIM_CODE_COMPANION_ANTHROPIC_API_KEY
 --           },
 --           schema = {
 --             model = {
---               default = "claude-3-7-sonnet-latest"
+--               default = 'claude-3-7-sonnet-latest'
 --             }
 --           }
 --         })
 --       end,
 --       xai = function()
---         return require("codecompanion.adapters").extend("xai", {
+--         return require('codecompanion.adapters').extend('xai', {
 --           env = {
 --             api_key = vim.env.NVIM_CODE_COMPANION_XAI_API_KEY
 --           },
 --           schema = {
 --             model = {
---               default = "grok-code-fast",
+--               default = 'grok-code-fast',
 --             },
 --           },
 --         })
