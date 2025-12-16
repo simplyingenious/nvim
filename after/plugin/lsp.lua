@@ -1,13 +1,16 @@
 -- Global capabilities
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
--- Global on_attach
+-- Global on_attach function for all LSP servers
+local function on_attach(client, bufnr)
+  -- LSP keymaps
+  vim.keymap.set('n', '<leader>f', vim.lsp.buf.format, { buffer = bufnr, desc = 'Format buffer' })
+end
+
+-- Set global defaults for ALL LSP servers
 vim.lsp.config('*', {
   capabilities = capabilities,
-  on_attach = function(client, bufnr)
-    -- LSP keymaps
-    vim.keymap.set('n', '<leader>f', vim.lsp.buf.format, { buffer = bufnr, desc = 'Format buffer' })
-  end,
+  on_attach = on_attach,
 })
 
 -- Define ESLint configuration file patterns
@@ -44,16 +47,26 @@ vim.lsp.config('lua_ls', {
 
 vim.lsp.config('eslint', {
   root_dir = function(fname)
+    if not fname or type(fname) ~= "string" then
+      return vim.loop.os_homedir()
+    end
+    
     -- 1. Try to find ESLint config in current file's ancestry
-    local eslint_root = vim.fs.dirname(vim.fs.find(eslint_config_files, { upward = true, path = fname })[1])
-    if eslint_root then
-      return eslint_root
+    local eslint_files = vim.fs.find(eslint_config_files, { upward = true, path = fname })
+    if eslint_files and #eslint_files > 0 then
+      local eslint_root = vim.fs.dirname(eslint_files[1])
+      if eslint_root then
+        return eslint_root
+      end
     end
 
     -- 2. Fall back to Git repository root (monorepo root)
-    local git_root = vim.fs.dirname(vim.fs.find({ '.git' }, { upward = true, path = fname })[1])
-    if git_root and has_eslint_config(git_root) then
-      return git_root
+    local git_files = vim.fs.find({ '.git' }, { upward = true, path = fname })
+    if git_files and #git_files > 0 then
+      local git_root = vim.fs.dirname(git_files[1])
+      if git_root and has_eslint_config(git_root) then
+        return git_root
+      end
     end
 
     -- 3. Final fallback: user's home directory
@@ -73,13 +86,18 @@ vim.lsp.config('stylelint_lsp', {
   }
 })
 
--- Setup servers without special config
+-- Setup servers without special config (they inherit global defaults)
 vim.lsp.config('html', {})
 vim.lsp.config('biome', {})
 vim.lsp.config('cssls', {})
 vim.lsp.config('cssmodules_ls', {})
 vim.lsp.config('css_variables', {})
 vim.lsp.config('somesass_ls', {})
+
+-- Configure ts_ls (TypeScript language server) before enabling
+vim.lsp.config('ts_ls', {
+  filetypes = { 'typescript', 'typescriptreact', 'javascript', 'javascriptreact' },
+})
 
 -- Enable the servers
 vim.lsp.enable('lua_ls')
@@ -92,8 +110,7 @@ vim.lsp.enable('cssls')
 vim.lsp.enable('cssmodules_ls')
 vim.lsp.enable('css_variables')
 vim.lsp.enable('somesass_ls')
-
-require('typescript-tools').setup({})
+vim.lsp.enable('ts_ls')
 
 local cmp = require('cmp')
 local ls = require('luasnip')

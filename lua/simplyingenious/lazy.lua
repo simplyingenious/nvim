@@ -1,30 +1,32 @@
 require("lazy").setup({
   {
-    "shaunsingh/nord.nvim",
+    "EdenEast/nightfox.nvim",
     lazy = false,
     priority = 1000,
-    name = "nord",
+    name = "nightfox",
     config = function()
-      vim.cmd([[colorscheme nord]])
+      -- Available variants: dayfox, nightfox, dawnfox, duskfox, nordfox, terafox, carbonfox
+      -- Use Theme() function in after/plugin/color.lua to set colorscheme
+      vim.cmd([[colorscheme nordfox]])
     end,
+  },
+  {
+    "shaunsingh/nord.nvim",
+    -- lazy = false,
+    -- priority = 1000,
+    name = "nord",
   },
   {
     "catppuccin/nvim",
-    lazy = false,
-    priority = 1000,
+    -- lazy = false,
+    -- priority = 1000,
     name = "catppuccin",
-    config = function()
-      vim.cmd([[colorscheme catppuccin]])
-    end,
   },
   {
     "rose-pine/neovim",
-    lazy = false,    -- make sure we load this during startup if it is your main colorscheme
-    priority = 1000, -- make sure to load this before all the other start plugins
-    name = 'rose-pine',
-    config = function()
-      vim.cmd([[colorscheme rose-pine]])
-    end,
+    -- lazy = false, -- make sure we load this during startup if it is your main colorscheme
+    -- priority = 1000, -- make sure to load this before all the other start plugins
+    name = "rose-pine",
   },
 
   { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
@@ -94,7 +96,7 @@ require("lazy").setup({
       local configs = require("nvim-treesitter.configs")
 
       configs.setup({
-        ensure_installed = { "javascript", "css", "lua", "vim" },
+        ensure_installed = { "javascript", "typescript", "css", "lua", "vim" },
 
         -- Install parsers synchronously (only applied to `ensure_installed`)
         sync_install = false,
@@ -125,16 +127,10 @@ require("lazy").setup({
   { "nvim-treesitter/nvim-treesitter-context", opts = {} },
 
   {
-    "pmizio/typescript-tools.nvim",
-    dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
-    opts = {},
-  },
-  {
     "williamboman/mason-lspconfig.nvim",
     opts = {
       -- list of servers for mason to install
       ensure_installed = {
-        "ts_ls",
         "html",
         "cssls",
         "tailwindcss",
@@ -143,6 +139,7 @@ require("lazy").setup({
         "graphql",
         "emmet_ls",
         "eslint",
+        "ts_ls",
       },
     },
     dependencies = {
@@ -179,11 +176,7 @@ require("lazy").setup({
   },
   { "tpope/vim-fugitive" },
 
-  {
-    "pmizio/typescript-tools.nvim",
-    dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
-    opts = {},
-  },
+  { "tpope/vim-fugitive" },
 
   { "rafamadriz/friendly-snippets" },
   {
@@ -319,9 +312,19 @@ require("lazy").setup({
     end,
   },
   {
-    "folke/todo-comments.nvim",
-    dependencies = { "nvim-lua/plenary.nvim" },
-    opts = {},
+    "pmizio/typescript-tools.nvim",
+    dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
+    opts = function()
+      local capabilities = require("cmp_nvim_lsp").default_capabilities()
+      local function on_attach(client, bufnr)
+        vim.keymap.set("n", "<leader>f", vim.lsp.buf.format, { buffer = bufnr, desc = "Format buffer" })
+      end
+
+      return {
+        capabilities = capabilities,
+        on_attach = on_attach,
+      }
+    end,
   },
 
   {
@@ -344,18 +347,18 @@ require("lazy").setup({
   },
 
   -- { 'RRethy/vim-illuminate', opts = {} },
-  {
-    "olimorris/codecompanion.nvim",
-    tag = "v17.33.0",
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-      "nvim-treesitter/nvim-treesitter",
-      "hrsh7th/nvim-cmp", -- Optional: For using slash commands and variables in the chat buffer
-      "nvim-telescope/telescope.nvim", -- Optional: For using slash commands
-      { "stevearc/dressing.nvim", opts = {} }, -- Optional: Improves `vim.ui.select`
-    },
-    config = true,
-  },
+  -- {
+  --   "olimorris/codecompanion.nvim",
+  --   tag = "v17.33.0",
+  --   dependencies = {
+  --     "nvim-lua/plenary.nvim",
+  --     "nvim-treesitter/nvim-treesitter",
+  --     "hrsh7th/nvim-cmp", -- Optional: For using slash commands and variables in the chat buffer
+  --     "nvim-telescope/telescope.nvim", -- Optional: For using slash commands
+  --     { "stevearc/dressing.nvim", opts = {} }, -- Optional: Improves `vim.ui.select`
+  --   },
+  --   config = true,
+  -- },
   {
     "mg979/vim-visual-multi",
     event = { "BufRead", "BufNewFile" },
@@ -398,5 +401,46 @@ require("lazy").setup({
         desc = "FFFind files",
       },
     },
+  },
+  {
+    "NickvanDyke/opencode.nvim",
+    dependencies = {
+      -- Recommended for `ask()` and `select()`.
+      -- Required for `snacks` provider.
+      ---@module 'snacks' <- Loads `snacks.nvim` types for configuration intellisense.
+      { "folke/snacks.nvim", opts = { input = {}, picker = {}, terminal = {} } },
+    },
+    config = function()
+      ---@type opencode.Opts
+      vim.g.opencode_opts = {
+        -- Your configuration, if any — see `lua/opencode/config.lua`, or "goto definition".
+      }
+
+      -- Required for `opts.events.reload`.
+      vim.o.autoread = true
+
+      -- Recommended/example keymaps.
+      vim.keymap.set({ "n", "x" }, "<C-a>", function()
+        require("opencode").ask("@this: ", { submit = true })
+      end, { desc = "Ask opencode" })
+      vim.keymap.set({ "n", "x" }, "<C-x>", function()
+        require("opencode").select()
+      end, { desc = "Execute opencode action…" })
+      vim.keymap.set({ "n", "x" }, "ga", function()
+        require("opencode").prompt("@this")
+      end, { desc = "Add to opencode" })
+      vim.keymap.set({ "n", "t" }, "<C-.>", function()
+        require("opencode").toggle()
+      end, { desc = "Toggle opencode" })
+      vim.keymap.set("n", "<S-C-u>", function()
+        require("opencode").command("session.half.page.up")
+      end, { desc = "opencode half page up" })
+      vim.keymap.set("n", "<S-C-d>", function()
+        require("opencode").command("session.half.page.down")
+      end, { desc = "opencode half page down" })
+      -- You may want these if you stick with the opinionated "<C-a>" and "<C-x>" above — otherwise consider "<leader>o".
+      vim.keymap.set("n", "+", "<C-a>", { desc = "Increment", noremap = true })
+      vim.keymap.set("n", "-", "<C-x>", { desc = "Decrement", noremap = true })
+    end,
   },
 })
