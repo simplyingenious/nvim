@@ -393,7 +393,15 @@ require('lazy').setup({
 	{
 		'sudo-tee/opencode.nvim',
 		config = function()
-			require('opencode').setup({})
+			require('opencode').setup({
+        default_mode = 'plan',
+        keymap = {
+          editor = {
+            ['<leader>oap'] = { 'agent_plan' },
+            ['<leader>oab'] = { 'agent_build' },
+          }
+        }
+      })
 		end,
 		dependencies = {
 			'nvim-lua/plenary.nvim',
@@ -416,4 +424,5 @@ require('lazy').setup({
 			-- 'nvim_mini/mini.nvim',
 		},
 	},
+  {'nanotee/zoxide.vim'}
 })
