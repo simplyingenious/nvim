@@ -87,7 +87,7 @@ require('lazy').setup({
 	{
 		'nvim-treesitter/nvim-treesitter',
 		dependencies = {
-			'JoosepAlviste/nvim-ts-context-commentstring',
+      'JoosepAlviste/nvim-ts-context-commentstring',
 		},
 		build = ':TSUpdate',
 		config = function()
@@ -193,20 +193,8 @@ require('lazy').setup({
 	{
 		'numToStr/Comment.nvim',
 		opts = function()
-			local ok, comment = pcall(require, 'Comment')
-			if not ok then
-				vim.notify('Comment.nvim not found', vim.log.levels.WARN)
-				return
-			end
-
-			local pre_hook = nil
-			local ok_commentstring, ts_context = pcall(require, 'ts_context_commentstring.integrations.comment_nvim')
-			if ok_commentstring then
-				pre_hook = ts_context.create_pre_hook()
-			end
-
-			comment.setup({
-				pre_hook = pre_hook,
+			require('Comment').setup({
+				pre_hook = require('ts_context_commentstring.integrations.comment_nvim').create_pre_hook(),
 			})
 		end,
 		lazy = false,
@@ -390,39 +378,87 @@ require('lazy').setup({
 			},
 		},
 	},
+	-- {
+	-- 	'sudo-tee/opencode.nvim',
+	-- 	config = function()
+	-- 		require('opencode').setup({
+	--        default_mode = 'plan',
+	--        keymap = {
+	--          editor = {
+	--            ['<leader>oap'] = { 'agent_plan' },
+	--            ['<leader>oab'] = { 'agent_build' },
+	--          }
+	--        }
+	--      })
+	-- 	end,
+	-- 	dependencies = {
+	-- 		'nvim-lua/plenary.nvim',
+	-- 		{
+	-- 			'MeanderingProgrammer/render-markdown.nvim',
+	-- 			opts = {
+	-- 				anti_conceal = { enabled = false },
+	-- 				file_types = { 'markdown', 'opencode_output' },
+	-- 			},
+	-- 			ft = { 'markdown', 'Avante', 'copilot-chat', 'opencode_output' },
+	-- 		},
+	-- 		-- Optional, for file mentions and commands completion, pick only one
+	-- 		'saghen/blink.cmp',
+	-- 		-- 'hrsh7th/nvim-cmp',
+	--
+	-- 		-- Optional, for file mentions picker, pick only one
+	-- 		'folke/snacks.nvim',
+	-- 		-- 'nvim-telescope/telescope.nvim',
+	-- 		-- 'ibhagwan/fzf-lua',
+	-- 		-- 'nvim_mini/mini.nvim',
+	-- 	},
+	-- },
 	{
-		'sudo-tee/opencode.nvim',
-		config = function()
-			require('opencode').setup({
-        default_mode = 'plan',
-        keymap = {
-          editor = {
-            ['<leader>oap'] = { 'agent_plan' },
-            ['<leader>oab'] = { 'agent_build' },
-          }
-        }
-      })
-		end,
+		'nickjvandyke/opencode.nvim',
 		dependencies = {
-			'nvim-lua/plenary.nvim',
-			{
-				'MeanderingProgrammer/render-markdown.nvim',
-				opts = {
-					anti_conceal = { enabled = false },
-					file_types = { 'markdown', 'opencode_output' },
-				},
-				ft = { 'markdown', 'Avante', 'copilot-chat', 'opencode_output' },
-			},
-			-- Optional, for file mentions and commands completion, pick only one
-			'saghen/blink.cmp',
-			-- 'hrsh7th/nvim-cmp',
-
-			-- Optional, for file mentions picker, pick only one
-			'folke/snacks.nvim',
-			-- 'nvim-telescope/telescope.nvim',
-			-- 'ibhagwan/fzf-lua',
-			-- 'nvim_mini/mini.nvim',
+			-- Recommended for `ask()` and `select()`.
+			-- Required for `snacks` provider.
+			---@module 'snacks' <- Loads `snacks.nvim` types for configuration intellisense.
+			{ 'folke/snacks.nvim', opts = { input = {}, picker = {}, terminal = {} } },
 		},
+		config = function()
+			---@type opencode.Opts
+			vim.g.opencode_opts = {
+				-- Your configuration, if any — see `lua/opencode/config.lua`, or "goto definition" on the type or field.
+			}
+
+			-- Required for `opts.events.reload`.
+			vim.o.autoread = true
+
+			-- Recommended/example keymaps.
+			vim.keymap.set({ 'n', 'x' }, '<C-a>', function()
+				require('opencode').ask('@this: ', { submit = true })
+			end, { desc = 'Ask opencode…' })
+			vim.keymap.set({ 'n', 'x' }, '<C-x>', function()
+				require('opencode').select()
+			end, { desc = 'Execute opencode action…' })
+			vim.keymap.set({ 'n', 't' }, '<C-.>', function()
+				require('opencode').toggle()
+			end, { desc = 'Toggle opencode' })
+
+			vim.keymap.set({ 'n', 'x' }, 'go', function()
+				return require('opencode').operator('@this ')
+			end, { desc = 'Add range to opencode', expr = true })
+			vim.keymap.set('n', 'goo', function()
+				return require('opencode').operator('@this ') .. '_'
+			end, { desc = 'Add line to opencode', expr = true })
+
+			vim.keymap.set('n', '<S-C-u>', function()
+				require('opencode').command('session.half.page.up')
+			end, { desc = 'Scroll opencode up' })
+			vim.keymap.set('n', '<S-C-d>', function()
+				require('opencode').command('session.half.page.down')
+			end, { desc = 'Scroll opencode down' })
+
+			-- You may want these if you use the opinionated `<C-a>` and `<C-x>` keymaps above — otherwise consider `<leader>o…` (and remove terminal mode from the `toggle` keymap).
+			vim.keymap.set('n', '+', '<C-a>', { desc = 'Increment under cursor', noremap = true })
+			vim.keymap.set('n', '-', '<C-x>', { desc = 'Decrement under cursor', noremap = true })
+		end,
 	},
-  {'nanotee/zoxide.vim'}
+	{ 'h3pei/copy-file-path.nvim' },
+	{ 'nanotee/zoxide.vim' },
 })
