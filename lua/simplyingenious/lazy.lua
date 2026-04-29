@@ -86,15 +86,12 @@ require('lazy').setup({
 	},
 	{
 		'nvim-treesitter/nvim-treesitter',
-		dependencies = {
-      'JoosepAlviste/nvim-ts-context-commentstring',
-		},
 		build = ':TSUpdate',
 		config = function()
 			local configs = require('nvim-treesitter.config')
 
 			configs.setup({
-				ensure_installed = { 'javascript', 'typescript', 'css', 'lua', 'vim' },
+				ensure_installed = { 'javascript', 'typescript', 'tsx', 'css', 'lua', 'vim' },
 
 				-- Install parsers synchronously (only applied to `ensure_installed`)
 				sync_install = false,
@@ -191,13 +188,10 @@ require('lazy').setup({
 	{ 'windwp/nvim-ts-autotag', opts = {} },
 	{ 'kylechui/nvim-surround', opts = {} },
 	{
-		'numToStr/Comment.nvim',
-		opts = function()
-			require('Comment').setup({
-				pre_hook = require('ts_context_commentstring.integrations.comment_nvim').create_pre_hook(),
-			})
-		end,
-		lazy = false,
+		'folke/ts-comments.nvim',
+		event = 'VeryLazy',
+		enabled = vim.fn.has('nvim-0.10') == 1,
+		opts = {},
 	},
 	{
 		'lewis6991/gitsigns.nvim',
@@ -305,6 +299,7 @@ require('lazy').setup({
 			require('colorizer').setup()
 		end,
 	},
+
 	{
 		'Exafunction/windsurf.vim',
 		config = function()
@@ -323,18 +318,6 @@ require('lazy').setup({
 			end, { expr = true, silent = true })
 		end,
 	},
-	-- {
-	--   "olimorris/codecompanion.nvim",
-	--   tag = "v17.33.0",
-	--   dependencies = {
-	--     "nvim-lua/plenary.nvim",
-	--     "nvim-treesitter/nvim-treesitter",
-	--     "hrsh7th/nvim-cmp", -- Optional: For using slash commands and variables in the chat buffer
-	--     "nvim-telescope/telescope.nvim", -- Optional: For using slash commands
-	--     { "stevearc/dressing.nvim", opts = {} }, -- Optional: Improves `vim.ui.select`
-	--   },
-	--   config = true,
-	-- },
 	{
 		'mg979/vim-visual-multi',
 		event = { 'BufRead', 'BufNewFile' },
@@ -418,7 +401,7 @@ require('lazy').setup({
 			-- Recommended for `ask()` and `select()`.
 			-- Required for `snacks` provider.
 			---@module 'snacks' <- Loads `snacks.nvim` types for configuration intellisense.
-			{ 'folke/snacks.nvim', opts = { input = {}, picker = {}, terminal = {} } },
+			{ 'folke/snacks.nvim', lazy = false, opts = { input = {}, picker = {}, terminal = {} } },
 		},
 		config = function()
 			---@type opencode.Opts
@@ -461,4 +444,15 @@ require('lazy').setup({
 	},
 	{ 'h3pei/copy-file-path.nvim' },
 	{ 'nanotee/zoxide.vim' },
+	{ 'sindrets/diffview.nvim' },
+	-- {
+	-- 	'ggml-org/llama.vim',
+	-- 	-- init = function()
+	-- 	-- 	vim.g.llama_config = {
+	-- 	-- 		-- auto_fim = false,
+	-- 	-- 		-- show_info = 0
+	-- 	-- 		endpoint_fim = 'http://127.0.0.1:8080/infill',
+	-- 	-- 	}
+	-- 	-- end,
+	-- },
 })
